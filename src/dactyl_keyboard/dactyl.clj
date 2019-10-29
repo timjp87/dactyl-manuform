@@ -59,7 +59,7 @@
 
 (def thumb-offsets [6 -3 7])
 
-(def keyboard-z-offset 9)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
+(def keyboard-z-offset 4)               ; controls overall height; original=9 with centercol=3; use 16 for centercol=2
 
 (def extra-width 2.5)                   ; extra space between the base of keys; original= 2
 (def extra-height 1.0)                  ; original= 0.5
@@ -127,42 +127,43 @@
 
 (def sa-length 18.25)
 (def sa-double-length 37.5)
-(def sa-cap {1 (let [bl2 (/ 18.5 2)
-                     m (/ 17 2)
-                     key-cap (hull (->> (polygon [[bl2 bl2] [bl2 (- bl2)] [(- bl2) (- bl2)] [(- bl2) bl2]])
-                                        (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                        (translate [0 0 0.05]))
-                                   (->> (polygon [[m m] [m (- m)] [(- m) (- m)] [(- m) m]])
-                                        (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                        (translate [0 0 6]))
-                                   (->> (polygon [[6 6] [6 -6] [-6 -6] [-6 6]])
-                                        (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                        (translate [0 0 12])))]
-                 (->> key-cap
-                      (translate [0 0 (+ 5 plate-thickness)])
-                      (color [220/255 163/255 163/255 1])))
-             2 (let [bl2 (/ sa-double-length 2)
-                     bw2 (/ 18.25 2)
-                     key-cap (hull (->> (polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
-                                        (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                        (translate [0 0 0.05]))
-                                   (->> (polygon [[6 16] [6 -16] [-6 -16] [-6 16]])
-                                        (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                        (translate [0 0 12])))]
-                 (->> key-cap
-                      (translate [0 0 (+ 5 plate-thickness)])
-                      (color [127/255 159/255 127/255 1])))
-             1.5 (let [bl2 (/ 18.25 2)
-                       bw2 (/ 28 2)
-                       key-cap (hull (->> (polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
-                                          (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                          (translate [0 0 0.05]))
-                                     (->> (polygon [[11 6] [-11 6] [-11 -6] [11 -6]])
-                                          (extrude-linear {:height 0.1 :twist 0 :convexity 0})
-                                          (translate [0 0 12])))]
-                   (->> key-cap
-                        (translate [0 0 (+ 5 plate-thickness)])
-                        (color [240/255 223/255 175/255 1])))})
+(def sa-cap
+  {1 (let [bl2 (/ 18.5 2)
+           m (/ 17 2)
+           key-cap (hull (->> (polygon [[bl2 bl2] [bl2 (- bl2)] [(- bl2) (- bl2)] [(- bl2) bl2]])
+                              (extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                              (translate [0 0 0.05]))
+                         (->> (polygon [[m m] [m (- m)] [(- m) (- m)] [(- m) m]])
+                              (extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                              (translate [0 0 6]))
+                         (->> (polygon [[6 6] [6 -6] [-6 -6] [-6 6]])
+                              (extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                              (translate [0 0 12])))]
+       (->> key-cap
+            (translate [0 0 (+ 5 plate-thickness)])
+            (color [220/255 163/255 163/255 1])))
+   2 (let [bl2 (/ sa-double-length 2)
+           bw2 (/ 18.25 2)
+           key-cap (hull (->> (polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
+                              (extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                              (translate [0 0 0.05]))
+                         (->> (polygon [[6 16] [6 -16] [-6 -16] [-6 16]])
+                              (extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                              (translate [0 0 12])))]
+       (->> key-cap
+            (translate [0 0 (+ 5 plate-thickness)])
+            (color [127/255 159/255 127/255 1])))
+   1.5 (let [bl2 (/ 18.25 2)
+             bw2 (/ 28 2)
+             key-cap (hull (->> (polygon [[bw2 bl2] [bw2 (- bl2)] [(- bw2) (- bl2)] [(- bw2) bl2]])
+                                (extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                (translate [0 0 0.05]))
+                           (->> (polygon [[11 6] [-11 6] [-11 -6] [11 -6]])
+                                (extrude-linear {:height 0.1 :twist 0 :convexity 0})
+                                (translate [0 0 12])))]
+         (->> key-cap
+              (translate [0 0 (+ 5 plate-thickness)])
+              (color [240/255 223/255 175/255 1])))})
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Placement Functions ;;
@@ -237,7 +238,6 @@
 (defn key-position [column row position]
   (apply-key-geometry (partial map +) rotate-around-x rotate-around-y column row position))
 
-
 (def key-holes
   (apply union
          (for [column columns
@@ -255,9 +255,6 @@
                          (not= row lastrow))]
            (->> (sa-cap (if (= column 5) 1 1))
                 (key-place column row)))))
-
-; (pr (rotate-around-y π [10 0 1]))
-; (pr (key-position 1 cornerrow [(/ mount-width 2) (- (/ mount-height 2)) 0]))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Web Connectors ;;
@@ -507,7 +504,8 @@
 (def left-wall-z-offset  3)
 
 (defn left-key-position [row direction]
-  (map - (key-position 0 row [(* mount-width -0.5) (* direction mount-height 0.5) 0]) [left-wall-x-offset 0 left-wall-z-offset]))
+  (map - (key-position 0 row [(* mount-width -0.5) (* direction mount-height 0.5) 0])
+       [left-wall-x-offset 0 left-wall-z-offset]))
 
 (defn left-key-place [row direction shape]
   (translate (left-key-position row direction) shape))
@@ -589,8 +587,7 @@
      (union
       (wall-brace thumb-mr-place  0  -1 web-post-br thumb-tr-place  0 -1 thumb-post-br)
       (wall-brace thumb-mr-place  0  -1 web-post-br thumb-mr-place  0 -1 web-post-bl)
-      (wall-brace thumb-ml-place -0.3 1 web-post-tr thumb-ml-place  0  1 web-post-tl)
-      ))
+      (wall-brace thumb-ml-place -0.3 1 web-post-tr thumb-ml-place  0  1 web-post-tl)))
    (case thumb-count ;; corners
      :six (union
            (wall-brace thumb-mr-place -1  0 web-post-bl thumb-mr-place  0 -1 web-post-bl)
@@ -655,10 +652,12 @@
 (def rj9-position  [(first rj9-start) (second rj9-start) 11])
 (def rj9-cube   (cube 14.78 13 22.38))
 (def rj9-space  (translate rj9-position rj9-cube))
-(def rj9-holder (translate rj9-position
-                           (difference rj9-cube
-                                       (union (translate [0 2 0] (cube 10.78  9 18.38))
-                                              (translate [0 0 5] (cube 10.78 13  5))))))
+(def rj9-holder
+  (translate
+   rj9-position
+   (difference rj9-cube
+               (union (translate [0 2 0] (cube 10.78  9 18.38))
+                      (translate [0 0 5] (cube 10.78 13  5))))))
 
 (def usb-holder-position (key-position 1 0 (map + (wall-locate2 0 1) [0 (/ mount-height 2) 0])))
 (def usb-holder-size [6.5 10.0 13.6])
@@ -676,9 +675,8 @@
                    (second usb-holder-position)
                    (/ (+ (last usb-holder-size) usb-holder-thickness) 2)])))
 
-
-(def trrs-usb-holder-ref (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
-
+(def trrs-usb-holder-ref
+  (key-position 0 0 (map - (wall-locate2  0  -1) [0 (/ mount-height 2) 0])))
 (def trrs-usb-holder-position
   (map + [17 19.3 0] [(first trrs-usb-holder-ref) (second trrs-usb-holder-ref) 2]))
 (def trrs-usb-holder-cube
@@ -782,28 +780,34 @@
          (translate [0 0 (/ height 2)] (sphere top-radius))))
 
 (defn screw-insert [column row bottom-radius top-radius height]
-  (let [shift-right   (= column lastcol)
-        shift-left    (= column 0)
-        shift-up      (and (not (or shift-right shift-left)) (= row 0))
-        shift-down    (and (not (or shift-right shift-left)) (>= row lastrow))
-        position      (if shift-up     (key-position column row (map + (wall-locate2  0  1) [0 (/ mount-height 2) 0]))
-                          (if shift-down  (key-position column row (map - (wall-locate2  0 -1) [0 (/ mount-height 2) 0]))
-                              (if shift-left (map + (left-key-position row 0) (wall-locate3 -1 0))
-                                  (key-position column row (map + (wall-locate2  1  0) [(/ mount-width 2) 0 0])))))]
+  (let [shift-right (= column lastcol)
+        shift-left  (= column 0)
+        shift-up    (and (not (or shift-right shift-left)) (= row 0))
+        shift-down  (and (not (or shift-right shift-left)) (>= row lastrow))
+        position    (if shift-up
+                      (key-position column row (map + (wall-locate2  0  1) [0 (/ mount-height 2) 0]))
+                      (if shift-down
+                        (key-position column row (map - (wall-locate2  0 -1) [0 (/ mount-height 2) 0]))
+                        (if shift-left
+                          (map + (left-key-position row 0) (wall-locate3 -1 0))
+                          (key-position column row (map + (wall-locate2  1  0) [(/ mount-width 2) 0 0])))))]
     (->> (screw-insert-shape bottom-radius top-radius height)
          (translate [(first position) (second position) (/ height 2)]))))
 
 (defn screw-insert-all-shapes [bottom-radius top-radius height]
   (union (screw-insert 0 0                bottom-radius top-radius height)
-         (screw-insert 0 cornerrow        bottom-radius top-radius height)
          (screw-insert 2 (+ lastrow 0.3)  bottom-radius top-radius height)
-         (screw-insert 3 0                bottom-radius top-radius height)
-         (screw-insert lastcol 1          bottom-radius top-radius height)))
+         (screw-insert 3 0                bottom-radius top-radius height)))
+
 (def screw-insert-height 3.8)
 (def screw-insert-bottom-radius (/ 5.31 2))
 (def screw-insert-top-radius (/ 5.1 2))
-(def screw-insert-holes  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
-(def screw-insert-outers (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6) (+ screw-insert-top-radius 1.6) (+ screw-insert-height 1.5)))
+(def screw-insert-holes
+  (screw-insert-all-shapes screw-insert-bottom-radius screw-insert-top-radius screw-insert-height))
+(def screw-insert-outers
+  (screw-insert-all-shapes (+ screw-insert-bottom-radius 1.6)
+                           (+ screw-insert-top-radius 1.6)
+                           (+ screw-insert-height 1.5)))
 (def screw-insert-screw-holes  (screw-insert-all-shapes 1.7 1.7 350))
 
 (def wire-post-height 7)
@@ -829,28 +833,30 @@
       (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
 
-(def model-right (difference
-                  (union
-                   key-holes
-                   connectors
-                   thumb
-                   thumb-connectors
-                   (difference (union case-walls
-                                      screw-insert-outers
-                                     ;(if use-promicro-usb-hole?
-                                     ;  (union pro-micro-holder
-                                     ;         trrs-usb-holder-holder)
-                                     ;  (union teensy-holder usb-holder))
-                                      (if use-trrs? trrs-holder))
-                               (if use-promicro-usb-hole?
-                                 (union trrs-usb-holder-space
-                                        trrs-usb-jack)
-                                 usb-holder-hole)
-                               (if use-trrs? trrs-holder-hole rj9-space)
-                               screw-insert-holes)
-                   (if-not use-trrs? rj9-holder)
-                   (if use-wire-post? wire-posts))
-                  (translate [0 0 -20] (cube 350 350 40))))
+(def model-right
+  (difference
+   (union
+    key-holes
+    connectors
+    thumb
+    thumb-connectors
+    (difference
+     (union case-walls
+            screw-insert-outers
+            (if use-promicro-usb-hole?
+              (union pro-micro-holder
+                     trrs-usb-holder-holder)
+              (union usb-holder)) ; teensy-holder))
+            (if use-trrs? trrs-holder ()))
+     (if use-promicro-usb-hole?
+       (union trrs-usb-holder-space
+              trrs-usb-jack)
+       usb-holder-hole)
+     (if use-trrs? trrs-holder-hole rj9-space)
+     screw-insert-holes)
+    (if-not use-trrs? rj9-holder)
+    (if use-wire-post? wire-posts))
+   (translate [0 0 -20] (cube 350 350 40))))
 
 (spit "things/right.scad"
       (write-scad model-right))
@@ -870,16 +876,7 @@
         caps
         teensy-holder
         rj9-holder
-        usb-holder-hole
-                    ; usb-holder-hole
-                    ; ; teensy-holder-hole
-                    ;             screw-insert-outers 
-                    ;             teensy-screw-insert-holes
-                    ;             teensy-screw-insert-outers
-                    ;             usb-cutout 
-                    ;             rj9-space 
-                                ; wire-posts
-        )))
+        usb-holder-hole)))
 
 (spit "things/right-plate.scad"
       (write-scad
@@ -894,7 +891,5 @@
 (spit "things/test.scad"
       (write-scad
        (difference usb-holder usb-holder-hole)))
-
-
 
 (defn -main [dum] 1)  ; dummy to make it easier to batch
