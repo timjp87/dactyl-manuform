@@ -120,7 +120,7 @@
                           (if create-side-nub? (with-fn 100 side-nub) ()))
         swap-holder (->> (cube (+ keyswitch-width 3) (/ (+ keyswitch-height 3) 2) 3)
                          (translate [0 (/ (+ keyswitch-height 3) 4) -1.5]))
-        main-axis-hole (->> (cylinder (/ 3.9 2) 10)
+        main-axis-hole (->> (cylinder (/ 4.0 2) 10)
                             (with-fn 12))
         plus-hole (->> (cylinder (/ 2.9 2) 10)
                        (with-fn 8)
@@ -132,12 +132,12 @@
                            (with-fn 8))
         friction-hole-right (translate [5 0 0] friction-hole)
         friction-hole-left (translate [-5 0 0] friction-hole)
-        hotswap-base-shape (->> (cube 12 5.80 1.8)
-                                (translate [0 4 -2.1]))
+        hotswap-base-shape (->> (cube 14 5.80 1.8)
+                                (translate [-1 4 -2.1]))
         hotswap-base-hold-shape (->> (cube (/ 12 2) (- 5.89 4) 1.8)
                                      (translate [(/ 12 4) (/ (- 5.89 4) 1) -2.1]))
-        hotswap-pad (cube 2.55 2.5 2)
-        hotswap-pad-plus (translate [(- 0 (+ (/ 10.9 2) (/ 2.55 2))) 2.54 -2.1]
+        hotswap-pad (cube 4.00 3.0 2)
+        hotswap-pad-plus (translate [(- 0 (+ (/ 12.9 2) (/ 2.55 2))) 2.54 -2.1]
                                     hotswap-pad)
         hotswap-pad-minus (translate [(+ (/ 10.9 2) (/ 2.55 2)) 5.08 -2.1]
                                      hotswap-pad)
@@ -150,9 +150,8 @@
                       (difference hotswap-base-shape
                                   hotswap-base-hold-shape)
                       hotswap-pad-plus
-                      hotswap-pad-minus
-                      #_column-wire-track)
-        diode-holder (->> (cube 6 8 1.8)
+                      hotswap-pad-minus)
+        diode-holder (->> (cube 2 4 1.8)
                           (translate [-7 5 -2.1]))
         hotswap-holder (difference swap-holder
                                    main-axis-hole
@@ -166,8 +165,8 @@
                             (mirror [1 0 0])
                             (mirror [0 1 0]))
                        hotswap-holder)
-                diode-holder
-                diode-wire-track
+                #_diode-holder
+                #_diode-wire-track
                 column-wire-track)))
 
 ;;;;;;;;;;;;;;;;
@@ -902,8 +901,8 @@
        usb-holder-hole)
      (if use-trrs? trrs-holder-hole rj9-space)
      screw-insert-holes)
-    (if-not use-trrs? rj9-holder)
-    (if use-wire-post? wire-posts))
+    (if-not use-trrs? rj9-holder ())
+    (if use-wire-post? wire-posts ()))
    (translate [0 0 -20] (cube 350 350 40))))
 
 (spit "things/right.scad"
