@@ -20,7 +20,7 @@
 (def β (/ π 36))                        ; curvature of the rows
 (def centerrow (- nrows 3))             ; controls front-back tilt
 (def centercol 4)                       ; controls left-right tilt / tenting (higher number is more tenting)
-(def tenting-angle (/ π 18))            ; or, change this for more precise tenting control
+(def tenting-angle (/ π 12))            ; or, change this for more precise tenting control
 (def column-style
   (if (> nrows 5) :orthographic :standard))  ; options include :standard, :orthographic, and :fixed
 
@@ -119,41 +119,41 @@
                           left-wall
                           (if create-side-nub? (with-fn 100 side-nub) ()))
         swap-holder (->> (cube (+ keyswitch-width 3) (/ (+ keyswitch-height 3) 2) 3)
-                         (translate [0 (/ (+ keyswitch-height 3) 4) 0]))
+                         (translate [0 (/ (+ keyswitch-height 3) 4) -1.5]))
         main-axis-hole (->> (cylinder (/ 3.9 2) 10)
-                            (with-fn 30))
+                            (with-fn 12))
         plus-hole (->> (cylinder (/ 2.9 2) 10)
-                       (with-fn 30)
+                       (with-fn 8)
                        (translate [-3.81 2.54 0]))
         minus-hole (->> (cylinder (/ 2.9 2) 10)
-                        (with-fn 30)
+                        (with-fn 8)
                         (translate [2.54 5.08 0]))
         friction-hole (->> (cylinder (/ 1.7 2) 10)
-                           (with-fn 30))
+                           (with-fn 8))
         friction-hole-right (translate [5 0 0] friction-hole)
         friction-hole-left (translate [-5 0 0] friction-hole)
-        hotswap-base-shape (->> (cube 10.9 5.80 1.8)
-                                (translate [0 4 -0.6]))
-        hotswap-base-hold-shape (->> (cube (/ 10.9 2) (- 5.89 4) 1.8)
-                                     (translate [(/ 10.9 4) (/ (- 5.89 4) 1) -0.6]))
+        hotswap-base-shape (->> (cube 12 5.80 1.8)
+                                (translate [0 4 -2.1]))
+        hotswap-base-hold-shape (->> (cube (/ 12 2) (- 5.89 4) 1.8)
+                                     (translate [(/ 12 4) (/ (- 5.89 4) 1) -2.1]))
         hotswap-pad (cube 2.55 2.5 2)
-        hotswap-pad-plus (translate [(- 0 (+ (/ 10.9 2) (/ 2.55 2))) 2.54 -0.5]
+        hotswap-pad-plus (translate [(- 0 (+ (/ 10.9 2) (/ 2.55 2))) 2.54 -2.1]
                                     hotswap-pad)
-        hotswap-pad-minus (translate [(+ (/ 10.9 2) (/ 2.55 2)) 5.08 -0.5]
+        hotswap-pad-minus (translate [(+ (/ 10.9 2) (/ 2.55 2)) 5.08 -2.1]
                                      hotswap-pad)
         wire-track (cube 4 (+ keyswitch-height 3) 1.8)
         column-wire-track (->> wire-track
-                               (translate [9.5 0 -0.9]))
+                               (translate [9.5 0 -2.4]))
         diode-wire-track (->> (cube 2 10 1.8)
-                              (translate [-7 8 -0.6]))
+                              (translate [-7 8 -2.1]))
         hotswap-base (union
                       (difference hotswap-base-shape
                                   hotswap-base-hold-shape)
                       hotswap-pad-plus
                       hotswap-pad-minus
                       #_column-wire-track)
-        diode-holder (->> (cube 2 3 1.8)
-                          (translate [-7 6 -0.6]))
+        diode-holder (->> (cube 6 8 1.8)
+                          (translate [-7 5 -2.1]))
         hotswap-holder (difference swap-holder
                                    main-axis-hole
                                    plus-hole
@@ -881,7 +881,6 @@
       (key-place column row (translate [0 0 0] (wire-post -1 6)))
       (key-place column row (translate [5 0 0] (wire-post  1 0)))))))
 
-#_
 (def model-right
   (difference
    (union
@@ -907,22 +906,23 @@
     (if use-wire-post? wire-posts))
    (translate [0 0 -20] (cube 350 350 40))))
 
-#_
 (spit "things/right.scad"
       (write-scad model-right))
 
+#_
 (def key-plate-right
   (union key-holes
          connectors
          thumb
          thumb-connectors))
 
+#_
 (spit "things/key-plate-right.scad"
       (write-scad key-plate-right))
 
 (spit "things/plate-right.scad"
       (write-scad (->> single-plate
-                       (translate [0 0 1.5]))))
+                       (translate [0 0 3]))))
 
 #_
 (spit "things/left.scad"
