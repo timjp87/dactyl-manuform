@@ -33,7 +33,7 @@
 ; :two  means only 2 1.5us used.
 ; :four means 2 1.5us and 2 1us.
 ; :six  means the usual dactyl.
-(def thumb-count :two)
+(def thumb-count :six)
 
 ; if you don't want the side nubs, set this
 ; parameter as false.
@@ -134,8 +134,8 @@
         friction-hole-left (translate [-5 0 0] friction-hole)
         hotswap-base-shape (->> (cube 14 5.80 1.8)
                                 (translate [-1 4 -2.1]))
-        hotswap-base-hold-shape (->> (cube (/ 12 2) (- 5.89 4) 1.8)
-                                     (translate [(/ 12 4) (/ (- 5.89 4) 1) -2.1]))
+        hotswap-base-hold-shape (->> (cube (/ 12 2) (- 6.2 4) 1.8)
+                                     (translate [(/ 12 4) (/ (- 6.2 4) 1) -2.1]))
         hotswap-pad (cube 4.00 3.0 2)
         hotswap-pad-plus (translate [(- 0 (+ (/ 12.9 2) (/ 2.55 2))) 2.54 -2.1]
                                     hotswap-pad)
@@ -156,10 +156,13 @@
         hotswap-holder (difference swap-holder
                                    main-axis-hole
                                    plus-hole
+                                   (mirror [-1 0 0] plus-hole)
                                    minus-hole
+                                   (mirror [-1 0 0] minus-hole)
                                    friction-hole-left
                                    friction-hole-right
-                                   hotswap-base)]
+                                   hotswap-base
+                                   (mirror [-1 0 0] hotswap-base))]
     (difference (union plate-half
                        (->> plate-half
                             (mirror [1 0 0])
@@ -923,7 +926,6 @@
       (write-scad (->> single-plate
                        (translate [0 0 3]))))
 
-#_
 (spit "things/left.scad"
       (write-scad (mirror [-1 0 0] model-right)))
 
