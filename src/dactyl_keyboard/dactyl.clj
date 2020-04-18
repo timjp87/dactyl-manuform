@@ -13,8 +13,8 @@
 ;; Shape parameters ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-(def nrows 4)
-(def ncols 5)
+(def nrows 5)
+(def ncols 6)
 
 (def α (/ π 12))                        ; curvature of the columns
 (def β (/ π 36))                        ; curvature of the rows
@@ -50,7 +50,7 @@
 
 ; if you want to use small usb hole, set
 ; this parameter as true
-(def use-promicro-usb-hole? false)
+(def use-promicro-usb-hole? true)
 
 (defn column-offset [column] (cond
                                (= column 2) [0 2.82 -4.5]
